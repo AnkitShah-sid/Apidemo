@@ -21,7 +21,7 @@ public class AccountControler {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("api/account")
+    @PostMapping("/accounts/")
     public ResponseEntity<AccountEntity> createAccount(@RequestBody AccountEntity account) {
         AccountEntity newAccount = accountService.createAccount(account);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -31,12 +31,12 @@ public class AccountControler {
         return ResponseEntity.created(location).body(newAccount);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/accounts/")
     public List<AccountEntity> getAll() {
         return accountService.getAllUser();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/accounts/{id}")
     public ResponseEntity<AccountEntity> getUserById(@PathVariable Long id) {
         AccountEntity user = accountService.getUserById(id);
         if (user == null) {
@@ -46,12 +46,18 @@ public class AccountControler {
     }
 
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<Void> updateAccount(@PathVariable("id") Long id, @RequestBody AccountEntity accountEntity) {
+    public ResponseEntity<Void> updateAccount(@PathVariable("id") Long id, @RequestBody  AccountEntity accountEntity) {
         AccountEntity accountEntity1 = new AccountEntity();
         accountEntity.setId(id);
         accountEntity.setUsername(accountEntity.getUsername());
         accountEntity.setPassword(accountEntity.getPassword());
         accountService.updateUser(accountEntity);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/accounts/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        accountService.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 }
